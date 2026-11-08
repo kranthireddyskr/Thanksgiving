@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f8b7a">
+<title>Destin Thanksgiving Trip</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root {
+  --bg: #f6efe2;
+  --surface: #fffaf1;
+  --surface-2: #f1e6d2;
+  --text: #27302e;
+  --muted: #6c675c;
+  --border: #e3d5bb;
+  --emerald: #0f8b7a;
+  --emerald-strong: #0a6c5f;
+  --emerald-soft: #d5efe9;
+  --sea: #1aa6a0;
+  --sunset: #ee7a35;
+  --sunset-strong: #c95a1c;
+  --sunset-soft: #fde6d6;
+  --danger: #b93a26;
+  --on-accent: #ffffff;
+  --shadow: 0 1px 2px rgba(60, 45, 20, .08), 0 4px 14px rgba(60, 45, 20, .07);
+  --d-wed: #ee7a35;
+  --d-thu: #0f8b7a;
+  --d-fri: #2a78c8;
+  --d-sat: #8e4fb8;
+  --d-sun: #c99a12;
+  --d-drive: #5b6670;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1817;
+    --surface: #152523;
+    --surface-2: #1c312e;
+    --text: #e9f1ee;
+    --muted: #9db2ad;
+    --border: #2a413d;
+    --emerald: #2fc3a8;
+    --emerald-strong: #5fd6bf;
+    --emerald-soft: #173b35;
+    --sea: #3cc2bb;
+    --sunset: #ff9657;
+    --sunset-strong: #ffad7a;
+    --sunset-soft: #3d2618;
+    --danger: #ff7a66;
+    --on-accent: #08201c;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .25);
+    --d-wed: #ff9657;
+    --d-thu: #2fc3a8;
+    --d-fri: #5aa4f0;
+    --d-sat: #c08ae6;
+    --d-sun: #e9bf3c;
+    --d-drive: #9aa7b2;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1817;
+  --surface: #152523;
+  --surface-2: #1c312e;
+  --text: #e9f1ee;
+  --muted: #9db2ad;
+  --border: #2a413d;
+  --emerald: #2fc3a8;
+  --emerald-strong: #5fd6bf;
+  --emerald-soft: #173b35;
+  --sea: #3cc2bb;
+  --sunset: #ff9657;
+  --sunset-strong: #ffad7a;
+  --sunset-soft: #3d2618;
+  --danger: #ff7a66;
+  --on-accent: #08201c;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .25);
+  --d-wed: #ff9657;
+  --d-thu: #2fc3a8;
+  --d-fri: #5aa4f0;
+  --d-sat: #c08ae6;
+  --d-sun: #e9bf3c;
+  --d-drive: #9aa7b2;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+}
+h1, h2, h3 { line-height: 1.2; margin: 0; }
+h2 { font-size: 1.2rem; }
+h3 { font-size: 1.02rem; }
+p { margin: .35rem 0; }
+a { color: var(--emerald-strong); }
+button, input, select, textarea { font: inherit; color: inherit; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+/* Header */
+.hero {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(238, 122, 53, .55) 0%, rgba(238, 122, 53, 0) 55%),
+    linear-gradient(160deg, #0a6c5f 0%, #129a88 55%, #1aa6a0 100%);
+  color: #fff;
+  padding: calc(14px + env(safe-area-inset-top)) 0 18px;
+  position: relative;
+}
+.hero::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 14px;
+  background: var(--bg);
+  border-radius: 14px 14px 0 0;
+}
+.hero h1 { font-size: 1.3rem; letter-spacing: .2px; }
+.hero .sub { opacity: .92; font-size: .9rem; margin-top: 2px; }
+
+/* Bottom nav */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, .06);
+}
+.tabbar .inner { display: grid; grid-template-columns: repeat(7, 1fr); max-width: 760px; margin: 0 auto; }
+.tabbar button {
+  border: 0; background: none; padding: 8px 0 7px; min-height: 58px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  font-size: 11px; color: var(--muted); cursor: pointer;
+}
+.tabbar button svg { width: 23px; height: 23px; }
+.tabbar button[aria-current="page"] { color: var(--emerald); font-weight: 600; }
+.tabbar button[aria-current="page"] svg { stroke: var(--sunset); }
+
+/* Sections */
+.view { display: none; padding-top: 10px; }
+.view.active { display: block; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  margin: 12px 0;
+  box-shadow: var(--shadow);
+}
+.card h2, .card h3 { margin-bottom: 8px; }
+.card.accent { border-left: 5px solid var(--sunset); }
+.card.sea { border-left: 5px solid var(--emerald); }
+.muted { color: var(--muted); }
+.small { font-size: .86rem; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.spread { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+ul.plain { list-style: none; padding: 0; margin: 0; }
+ul.bullets { margin: .2rem 0; padding-left: 1.2rem; }
+ul.bullets li { margin: .3rem 0; }
+
+/* Buttons and inputs */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 44px; padding: 0 16px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+  font-weight: 600; text-decoration: none; cursor: pointer;
+}
+.btn.primary { background: var(--emerald); border-color: var(--emerald); color: var(--on-accent); }
+.btn.sunset { background: var(--sunset); border-color: var(--sunset); color: #fff; }
+:root[data-theme="dark"] .btn.sunset { color: #2a1406; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.sunset { color: #2a1406; } }
+.btn.danger { color: var(--danger); background: transparent; border-color: var(--danger); }
+.btn.ghost { background: transparent; }
+.btn.block { width: 100%; }
+.btn.sm { min-height: 38px; padding: 0 12px; font-size: .9rem; border-radius: 10px; }
+.icon-btn {
+  width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface); display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  color: var(--muted);
+}
+.icon-btn svg { width: 18px; height: 18px; }
+.icon-btn:disabled { opacity: .35; cursor: default; }
+input[type="text"], input[type="number"], input[type="time"], select, textarea {
+  width: 100%; min-height: 44px; padding: 8px 12px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--bg);
+}
+textarea { min-height: 110px; resize: vertical; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--sunset); outline-offset: 1px;
+}
+label.field { display: block; margin: 8px 0; font-size: .88rem; color: var(--muted); }
+label.field > span { display: block; margin-bottom: 4px; }
+input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--emerald); cursor: pointer; flex: none; }
+.check-hit { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; cursor: pointer; }
+
+/* Pills */
+.pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--surface-2); color: var(--muted); }
+.pill.live { background: var(--emerald-soft); color: var(--emerald-strong); }
+.pill.warn { background: var(--sunset-soft); color: var(--sunset-strong); }
+.dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+
+/* Countdown */
+.countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; margin-top: 8px; }
+.countdown div { background: var(--surface-2); border-radius: 12px; padding: 10px 0; }
+.countdown b { display: block; font-size: 1.7rem; color: var(--emerald-strong); font-variant-numeric: tabular-nums; }
+.countdown span { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fact { background: var(--surface-2); border-radius: 12px; padding: 10px; }
+.fact b { display: block; font-size: 1.05rem; }
+.fact span { font-size: .8rem; color: var(--muted); }
+
+.now-card { background: linear-gradient(135deg, var(--emerald-soft), var(--sunset-soft)); }
+.banner {
+  border-radius: 14px; padding: 12px 14px; margin: 12px 0;
+  background: var(--sunset); color: #fff; font-weight: 600;
+}
+:root[data-theme="dark"] .banner { color: #2a1406; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .banner { color: #2a1406; } }
+.banner .small { font-weight: 400; opacity: .95; }
+
+/* Itinerary */
+.daytabs {
+  position: sticky; top: 0; z-index: 500;
+  background: var(--bg);
+  padding: 8px 0;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+}
+.daytabs button {
+  min-height: 56px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surface); cursor: pointer; padding: 4px 0; line-height: 1.15;
+}
+.daytabs button b { display: block; font-size: .95rem; }
+.daytabs button span { display: block; font-size: .72rem; color: var(--muted); }
+.daytabs button .cnt { font-size: .66rem; }
+.daytabs button[aria-selected="true"] { border-color: var(--emerald); background: var(--emerald); color: var(--on-accent); }
+.daytabs button[aria-selected="true"] span { color: inherit; opacity: .9; }
+.stops { list-style: none; margin: 0; padding: 0; }
+.stop {
+  display: flex; gap: 6px; align-items: flex-start;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 8px 10px 10px 4px; margin: 10px 0; box-shadow: var(--shadow);
+  border-left: 5px solid var(--daycolor, var(--emerald));
+}
+.stop .body { flex: 1; min-width: 0; padding-top: 8px; }
+.stop .time { font-weight: 700; color: var(--sunset-strong); font-size: .9rem; }
+.stop .name { font-weight: 700; font-size: 1.02rem; }
+.stop .desc { color: var(--muted); font-size: .9rem; }
+.stop.done .name, .stop.done .desc { text-decoration: line-through; opacity: .6; }
+.stop .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
+.stop .actions .btn { margin-right: auto; padding: 0 12px; }
+.stop .actions .icon-btn { width: 38px; height: 38px; }
+@media (max-width: 380px) { .stop .actions { gap: 4px; } .stop .actions .icon-btn { width: 36px; height: 36px; } }
+
+/* Tables */
+table.legs { width: 100%; border-collapse: collapse; }
+table.legs th, table.legs td { padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: middle; }
+table.legs th { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+table.legs select { min-width: 110px; }
+table.legs input[type="time"] { min-width: 110px; }
+.warn-text { color: var(--sunset-strong); font-size: .82rem; font-weight: 600; }
+@media (max-width: 640px) {
+  table.legs thead { display: none; }
+  table.legs, table.legs tbody, table.legs tr, table.legs td { display: block; width: 100%; }
+  table.legs tr { border: 1px solid var(--border); border-radius: 14px; padding: 6px 10px; margin: 10px 0; background: var(--surface-2); }
+  table.legs td { border: 0; padding: 5px 0; display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 8px; }
+  table.legs td::before { content: attr(data-label); font-size: .8rem; color: var(--muted); font-weight: 600; }
+  table.legs td.leghead { display: block; font-weight: 700; font-size: 1rem; }
+  table.legs td.leghead::before { content: none; }
+  table.legs td.fromto { display: none; }
+}
+
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--surface-2); padding: 4px; border-radius: 12px; margin: 10px 0; }
+.seg button { min-height: 42px; border: 0; border-radius: 9px; background: transparent; font-weight: 600; cursor: pointer; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--emerald-strong); box-shadow: var(--shadow); }
+
+.person-row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; margin: 8px 0; }
+.person-row label { display: inline-flex; gap: 6px; align-items: center; font-size: .85rem; color: var(--muted); }
+
+/* Map */
+#map { height: 62vh; min-height: 340px; border-radius: 16px; border: 1px solid var(--border); background: var(--surface-2); z-index: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .85rem; margin-top: 8px; }
+.leaflet-popup-content { font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.leaflet-popup-content a.btn { color: var(--on-accent); }
+.leaflet-container a.btn.primary { color: #fff; }
+
+/* Weather */
+.wx { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.wx th, .wx td { padding: 8px 4px; border-bottom: 1px solid var(--border); text-align: left; }
+.wx th { font-size: .75rem; color: var(--muted); text-transform: uppercase; }
+.wx td.num { font-variant-numeric: tabular-nums; }
+.wx .src { font-size: .7rem; }
+
+/* Checklists */
+.item { display: flex; align-items: center; gap: 4px; padding: 2px 0; border-bottom: 1px solid var(--border); }
+.item:last-child { border-bottom: 0; }
+.item .txt { flex: 1; min-width: 0; }
+.item.done .txt { text-decoration: line-through; opacity: .6; }
+.item select { width: auto; min-width: 96px; max-width: 130px; min-height: 38px; padding: 4px 8px; font-size: .85rem; }
+.progress { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin: 6px 0 2px; }
+.progress i { display: block; height: 100%; background: linear-gradient(90deg, var(--emerald), var(--sea)); }
+.res { border-bottom: 1px solid var(--border); padding: 10px 0; }
+.res:last-child { border-bottom: 0; }
+.status-Confirmed, .status-Booked { color: var(--emerald-strong); }
+.status-To-do { color: var(--sunset-strong); }
+
+/* Expenses */
+.money-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.money-grid .fact b { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.checks { display: flex; flex-wrap: wrap; gap: 6px; }
+.checks label { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); min-height: 44px; cursor: pointer; }
+.exp { display: flex; gap: 8px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.exp:last-child { border-bottom: 0; }
+.exp .amt { font-weight: 700; font-variant-numeric: tabular-nums; }
+.bal-pos { color: var(--emerald-strong); font-weight: 700; }
+.bal-neg { color: var(--danger); font-weight: 700; }
+.settle li { padding: 8px 0; border-bottom: 1px dashed var(--border); }
+
+dialog {
+  border: 1px solid var(--border); border-radius: 18px; padding: 0; width: min(520px, calc(100vw - 24px));
+  background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+}
+dialog::backdrop { background: rgba(10, 20, 18, .55); }
+dialog form { padding: 16px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-weight: 600;
+  z-index: 2000; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: calc(100vw - 32px);
+}
+.toast.show { opacity: 1; }
+.storage-warn { background: var(--sunset-soft); color: var(--sunset-strong); border-radius: 12px; padding: 10px 12px; margin-top: 10px; font-size: .9rem; display: none; }
+.mobile-only { display: none; }
+@media (max-width: 640px) { .mobile-only { display: inline; } }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (min-width: 700px) {
+  .hero h1 { font-size: 1.6rem; }
+  .facts { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 370px) {
+  .money-grid { grid-template-columns: 1fr 1fr; }
+  .countdown b { font-size: 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Destin Thanksgiving Road Trip</h1>
+    <div class="sub">Irving, TX to Destin, FL | Nov 25 to 29, 2026 | All times Central</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="storageWarn" class="storage-warn">Storage is unavailable in this browser, so edits will not be saved after you close the page.</div>
+
+  <!-- HOME -->
+  <section id="view-home" class="view" aria-label="Home">
+    <div class="card" id="countdownCard"></div>
+    <div id="homeNow"></div>
+    <div class="card">
+      <h2>Destin in late November</h2>
+      <div class="facts">
+        <div class="fact"><b>6:20 AM</b><span>Sunrise (about)</span></div>
+        <div class="fact"><b>4:45 PM</b><span>Sunset (about)</span></div>
+        <div class="fact"><b>60s F</b><span>Typical highs</span></div>
+        <div class="fact"><b>Near 50 F</b><span>Typical lows</span></div>
+        <div class="fact"><b>About 66 F</b><span>Gulf water, too cold to swim</span></div>
+        <div class="fact"><b>Central</b><span>Destin is on Central Time too</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="spread"><h2>Trip notes</h2><span class="muted small" id="notesSaved"></span></div>
+      <label class="sr-only" for="tripNotes">Trip notes</label>
+      <textarea id="tripNotes" placeholder="Lodging address, door code, group chat link, anything the group needs..."></textarea>
+    </div>
+    <div class="card">
+      <h2>Share and settings</h2>
+      <div class="grid2" style="margin-top:8px">
+        <button class="btn primary" data-action="share">Share itinerary</button>
+        <button class="btn" data-action="copy">Copy as text</button>
+      </div>
+      <label class="field"><span>Appearance</span>
+        <select id="themeSelect">
+          <option value="auto">Match my phone</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <button class="btn danger block" data-action="reset" style="margin-top:6px">Reset to default plan</button>
+    </div>
+  </section>
+
+  <!-- ITINERARY -->
+  <section id="view-days" class="view" aria-label="Itinerary">
+    <div class="daytabs" role="tablist" id="dayTabs"></div>
+    <div id="dayView"></div>
+  </section>
+
+  <!-- DRIVE -->
+  <section id="view-drive" class="view" aria-label="Drive plan">
+    <div id="driveBanner"></div>
+    <div class="seg" role="group" aria-label="Drive direction">
+      <button data-action="dir" data-dir="out">Outbound, Wed</button>
+      <button data-action="dir" data-dir="ret">Return, Sun</button>
+    </div>
+    <div id="driveView"></div>
+    <div class="card">
+      <h2>Travelers and drivers</h2>
+      <p class="muted small">Names are shared across driving, packing, and expenses. Untick "Drives" for anyone not driving.</p>
+      <div id="peopleList"></div>
+      <div class="row" style="margin-top:8px">
+        <input type="text" id="newPerson" placeholder="Add a traveler" style="flex:1" maxlength="30">
+        <button class="btn" data-action="addPerson">Add</button>
+      </div>
+    </div>
+    <div class="card accent">
+      <h2>Safety rules</h2>
+      <ul class="bullets">
+        <li>Swap drivers every 2.5 to 3 hours, even if the driver feels fine.</li>
+        <li>At night the front passenger stays awake and keeps the driver talking.</li>
+        <li>Refuel at half a tank on rural Mississippi stretches. Many stations close overnight.</li>
+        <li>Watch for deer on US 49 and US 98, especially between dusk and dawn. Use high beams when the road is clear.</li>
+        <li>Possible toll at the Mid Bay Bridge into Destin. Have a card or toll tag ready.</li>
+        <li>No one drives two legs in a row. Use the auto assign button to keep the rotation fair.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section id="view-map" class="view" aria-label="Map">
+    <div class="seg" role="group" aria-label="Map view">
+      <button data-action="mapview" data-view="local">Destin area</button>
+      <button data-action="mapview" data-view="route">Route overview</button>
+    </div>
+    <div id="map" role="region" aria-label="Interactive map"></div>
+    <div class="legend" id="mapLegend"></div>
+    <p class="muted small">Pins are approximate. Tap a pin for the name, day, and a directions link. The route line is a simplified sketch of I-20, US 49, US 98, I-10, and FL 85.</p>
+    <div class="card" id="placeList"></div>
+  </section>
+
+  <!-- WEATHER -->
+  <section id="view-weather" class="view" aria-label="Weather">
+    <div class="card" id="wxStatus"></div>
+    <div id="wxTables"></div>
+    <div class="card accent">
+      <h2>Rain backup plan</h2>
+      <ul class="bullets">
+        <li><b>Gulfarium Marine Adventure Park</b> on Okaloosa Island. Plenty of indoor exhibits.</li>
+        <li><b>Fat Daddy's Arcade</b> for games and a few hours out of the rain.</li>
+        <li><b>Destin Commons</b> for covered shopping, a movie, and food.</li>
+        <li><b>A long seafood lunch on the harbor</b> at HarborWalk Village, watching the boats come in.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CHECKLISTS -->
+  <section id="view-lists" class="view" aria-label="Checklists">
+    <div class="card">
+      <div class="spread"><h2>Reservations</h2><span class="pill" id="resCount"></span></div>
+      <div id="resList"></div>
+      <div class="row" style="margin-top:8px">
+        <input type="text" id="newRes" placeholder="Add a reservation" style="flex:1" maxlength="60">
+        <button class="btn" data-action="addRes">Add</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="spread"><h2>Packing</h2><span class="pill" id="packCount"></span></div>
+      <div class="progress"><i id="packBar" style="width:0"></i></div>
+      <div id="packList"></div>
+      <h3 style="margin-top:14px">Add an item</h3>
+      <input type="text" id="newPack" placeholder="Item name" maxlength="60">
+      <div class="grid2" style="margin-top:8px">
+        <select id="newPackCat" aria-label="Category"></select>
+        <select id="newPackWho" aria-label="Assign to"></select>
+      </div>
+      <button class="btn primary block" data-action="addPack" style="margin-top:8px">Add item</button>
+    </div>
+  </section>
+
+  <!-- EXPENSES -->
+  <section id="view-money" class="view" aria-label="Expenses">
+    <div class="card">
+      <h2>Trip totals</h2>
+      <div class="money-grid" id="moneySummary"></div>
+      <div id="catTotals" class="small muted" style="margin-top:8px"></div>
+    </div>
+    <div class="card sea">
+      <h2>Add expense</h2>
+      <label class="field"><span>Description</span><input type="text" id="expDesc" placeholder="Gas in Jackson" maxlength="60"></label>
+      <div class="grid2">
+        <label class="field"><span>Amount ($)</span><input type="number" id="expAmt" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></label>
+        <label class="field"><span>Category</span>
+          <select id="expCat">
+            <option value="gas">Gas</option><option value="lodging">Lodging</option><option value="food">Food</option><option value="activities">Activities</option><option value="other">Other</option>
+          </select>
+        </label>
+      </div>
+      <label class="field"><span>Paid by</span><select id="expPaid"></select></label>
+      <div class="field"><span class="muted small">Split among</span><div class="checks" id="expSplit" style="margin-top:4px"></div></div>
+      <button class="btn primary block" data-action="addExp">Add expense</button>
+    </div>
+    <div class="card">
+      <h2>Who owes whom</h2>
+      <div id="settle"></div>
+    </div>
+    <div class="card">
+      <h2>Balances</h2>
+      <div id="balances"></div>
+    </div>
+    <div class="card">
+      <h2>All expenses</h2>
+      <div id="expList"></div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabbar" aria-label="Sections">
+  <div class="inner" id="tabbar"></div>
+</nav>
+
+<dialog id="stopDialog" aria-labelledby="stopDlgTitle">
+  <form method="dialog" id="stopForm">
+    <h2 id="stopDlgTitle">Edit stop</h2>
+    <div class="grid2">
+      <label class="field"><span>Time</span><input type="time" id="fTime" required></label>
+      <label class="field"><span>Day</span><select id="fDay"></select></label>
+    </div>
+    <label class="row small muted" style="min-height:44px"><input type="checkbox" id="fNext"> After midnight (next calendar day)</label>
+    <label class="field"><span>Name</span><input type="text" id="fName" required maxlength="80"></label>
+    <label class="field"><span>Short description</span><textarea id="fDesc" style="min-height:70px" maxlength="240"></textarea></label>
+    <label class="field"><span>Place for directions (address or place name)</span><input type="text" id="fPlace" maxlength="120" placeholder="Destin, FL"></label>
+    <div class="grid2" style="margin-top:12px">
+      <button class="btn" value="cancel" formnovalidate>Cancel</button>
+      <button class="btn primary" value="save" id="fSave">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+
+/* ------------------------------------------------------------------ */
+/* Constants                                                          */
+/* ------------------------------------------------------------------ */
+var KEY = 'destinThanksgiving2026.v1';
+var TZ = '-06:00'; // Central Standard Time for all trip dates
+var DEPART = new Date('2026-11-25T17:30:00' + TZ);
+var DAYS = ['wed', 'thu', 'fri', 'sat', 'sun'];
+var DATES = { wed: '2026-11-25', thu: '2026-11-26', fri: '2026-11-27', sat: '2026-11-28', sun: '2026-11-29' };
+var DAY_INFO = {
+  wed: { short: 'Wed', md: '11/25', title: 'Overnight drive' },
+  thu: { short: 'Thu', md: '11/26', title: 'Thanksgiving' },
+  fri: { short: 'Fri', md: '11/27', title: '30A day' },
+  sat: { short: 'Sat', md: '11/28', title: 'Destin harbor day' },
+  sun: { short: 'Sun', md: '11/29', title: 'Drive home' }
+};
+var CATS = { gas: 'Gas', lodging: 'Lodging', food: 'Food', activities: 'Activities', other: 'Other' };
+var PACK_CATS = ['Clothing', 'Car', 'Beach', 'Documents', 'Other'];
+var RES_STATUS = ['To do', 'Requested', 'Booked', 'Confirmed'];
+
+var PLACES = [
+  { name: 'Destin (home base)', day: 'thu', lat: 30.3935, lng: -86.4958, q: 'Destin, FL' },
+  { name: 'Henderson Beach State Park', day: 'thu', lat: 30.3840, lng: -86.4460, q: 'Henderson Beach State Park, Destin, FL' },
+  { name: 'Grayton Beach State Park', day: 'fri', lat: 30.3290, lng: -86.1570, q: 'Grayton Beach State Park, Santa Rosa Beach, FL' },
+  { name: 'Seaside', day: 'fri', lat: 30.3210, lng: -86.1400, q: 'Seaside, FL' },
+  { name: 'Alys Beach', day: 'fri', lat: 30.2910, lng: -86.0400, q: 'Alys Beach, FL' },
+  { name: 'Rosemary Beach', day: 'fri', lat: 30.2790, lng: -86.0150, q: 'Rosemary Beach, FL' },
+  { name: 'Silver Sands Premium Outlets', day: 'fri', lat: 30.3880, lng: -86.4110, q: 'Silver Sands Premium Outlets, Miramar Beach, FL' },
+  { name: 'HarborWalk Village', day: 'sat', lat: 30.3940, lng: -86.5130, q: 'HarborWalk Village, Destin, FL' },
+  { name: 'Norriego Point', day: 'sat', lat: 30.3910, lng: -86.5170, q: 'Norriego Point, Destin, FL' },
+  { name: 'Gulfarium Marine Adventure Park', day: 'sat', lat: 30.3990, lng: -86.5970, q: 'Gulfarium Marine Adventure Park, Fort Walton Beach, FL' },
+  { name: 'Destin Commons', day: 'sat', lat: 30.3915, lng: -86.4305, q: 'Destin Commons, Destin, FL' },
+  { name: 'Village of Baytowne Wharf', day: 'sat', lat: 30.3890, lng: -86.3260, q: 'Village of Baytowne Wharf, Miramar Beach, FL' }
+];
+var ROUTE_STOPS = [
+  { name: 'Irving, TX (start and finish)', lat: 32.8140, lng: -96.9489, q: 'Irving, TX' },
+  { name: 'Shreveport, LA (dinner and swap)', lat: 32.5252, lng: -93.7502, q: 'Shreveport, LA' },
+  { name: 'Jackson, MS (fuel and swap)', lat: 32.2988, lng: -90.1848, q: 'Jackson, MS' },
+  { name: 'Hattiesburg, MS (fuel and swap)', lat: 31.3271, lng: -89.2903, q: 'Hattiesburg, MS' },
+  { name: 'Mobile, AL (fuel and swap)', lat: 30.6954, lng: -88.0399, q: 'Mobile, AL' }
+];
+// Simplified route sketch: I-20, US 49, US 98, I-10, FL 85, Mid Bay Bridge
+var ROUTE_LINE = [
+  [32.8140, -96.9489], [32.5007, -94.7405], [32.5252, -93.7502], [32.5093, -92.1193], [32.3526, -90.8779],
+  [32.2988, -90.1848], [31.8710, -89.7340], [31.3271, -89.2903], [30.9252, -88.5900], [30.6954, -88.0399],
+  [30.6100, -87.7300], [30.6300, -87.0400], [30.7621, -86.5705], [30.5169, -86.4822], [30.4800, -86.4250],
+  [30.3950, -86.4300], [30.3935, -86.4958]
+];
+
+/* ------------------------------------------------------------------ */
+/* Helpers                                                            */
+/* ------------------------------------------------------------------ */
+function uid() { return Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4); }
+function $(id) { return document.getElementById(id); }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+function addDays(dateStr, n) {
+  var d = new Date(dateStr + 'T12:00:00Z');
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+function at(dateStr, hhmm) { return new Date(dateStr + 'T' + hhmm + ':00' + TZ); }
+function fmtTime(hhmm) {
+  if (!hhmm) return '';
+  var p = hhmm.split(':'), h = +p[0], m = +p[1];
+  var ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return h + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
+}
+function dateToHHMM(d) {
+  // Convert a Date to Central (UTC-6) HH:MM for display
+  var c = new Date(d.getTime() - 6 * 3600 * 1000);
+  var h = c.getUTCHours(), m = c.getUTCMinutes();
+  return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+}
+function money(cents) {
+  var neg = cents < 0; cents = Math.abs(Math.round(cents));
+  var s = (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return (neg ? '-$' : '$') + s;
+}
+function dur(ms) {
+  var mins = Math.max(0, Math.round(ms / 60000));
+  var h = Math.floor(mins / 60), m = mins % 60;
+  if (h && m) return h + ' hr ' + m + ' min';
+  if (h) return h + ' hr';
+  return m + ' min';
+}
+function mapsUrl(q) { return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q); }
+function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+
+// Allow ?now=2026-11-26T14:00:00-06:00 for previewing in-trip views
+var NOW_OFFSET = 0;
+(function () {
+  try {
+    var q = new URLSearchParams(location.search).get('now');
+    if (q) { var t = new Date(q); if (!isNaN(t)) NOW_OFFSET = t.getTime() - Date.now(); }
+  } catch (e) { /* ignore */ }
+})();
+function now() { return new Date(Date.now() + NOW_OFFSET); }
+
+var ICONS = {
+  home: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
+  days: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  drive: '<path d="M5 16l1.5-5.5A2 2 0 0 1 8.4 9h7.2a2 2 0 0 1 1.9 1.5L19 16"/><rect x="3" y="15" width="18" height="4" rx="1.5"/><circle cx="7.5" cy="19.5" r="1.5"/><circle cx="16.5" cy="19.5" r="1.5"/>',
+  map: '<path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.3"/>',
+  weather: '<circle cx="8" cy="8" r="3"/><path d="M8 2v1.5M2 8h1.5M3.8 3.8l1 1M12.2 3.8l-1 1"/><path d="M8 20h9a4 4 0 0 0 0-8 5 5 0 0 0-9.6 1.5A3.3 3.3 0 0 0 8 20z"/>',
+  lists: '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/>',
+  money: '<path d="M12 3v18"/><path d="M17 7.5c-.8-1.5-2.6-2.5-5-2.5-2.8 0-4.5 1.4-4.5 3.3 0 4.5 9.5 2.6 9.5 7.4 0 2-1.9 3.3-5 3.3-2.5 0-4.4-1-5.2-2.7"/>',
+  up: '<path d="M6 15l6-6 6 6"/>',
+  down: '<path d="M6 9l6 6 6-6"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13M9 7V4h6v3"/>'
+};
+function icon(name) {
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+}
+
+/* ------------------------------------------------------------------ */
+/* Default plan                                                       */
+/* ------------------------------------------------------------------ */
+function stop(time, name, desc, place, nextDay) {
+  return { id: uid(), time: time, name: name, desc: desc || '', place: place || '', nextDay: !!nextDay, done: false };
+}
+function leg(from, to, dep, arr) { return { id: uid(), from: from, to: to, dep: dep, arr: arr, driver: '', co: '', done: false }; }
+
+function defaults() {
+  var people = ['Traveler 1', 'Traveler 2', 'Traveler 3', 'Traveler 4'].map(function (n) { return { id: uid(), name: n, drives: true }; });
+  var pack = [];
+  function p(cat, items) { items.forEach(function (t) { pack.push({ id: uid(), text: t, cat: cat, who: '', done: false }); }); }
+  p('Clothing', ['Layers (long sleeves, a fleece)', 'Light jacket or windbreaker', 'Swimsuit', 'Beach shoes']);
+  p('Car', ['Phone mounts', 'Chargers and cables', 'Snacks', 'Water', 'Pillow and blanket for night riders', 'Toll payment (card or toll tag)']);
+  p('Beach', ['Sunscreen', 'Sunglasses', 'Towels']);
+  p('Documents', ['ID or driver license', 'Car insurance card']);
+  return {
+    v: 1,
+    notes: '',
+    people: people,
+    days: {
+      wed: [
+        stop('17:00', 'Finish office, final car load', 'Wrap up work, load the car, check tires and oil.', 'Irving, TX'),
+        stop('17:30', 'Depart Irving', 'Head east on I-20 toward Shreveport. Fill the tank before leaving.', 'Irving, TX'),
+        stop('20:30', 'Dinner and driver swap, Shreveport, LA', 'First swap. Eat, stretch, and fuel up.', 'Shreveport, LA'),
+        stop('23:45', 'Fuel and driver swap, Jackson, MS', 'Fill up before turning south on US 49. Stations thin out overnight.', 'Jackson, MS'),
+        stop('01:45', 'Fuel and driver swap, Hattiesburg, MS', 'Top off before US 98. Watch for deer.', 'Hattiesburg, MS', true),
+        stop('03:45', 'Fuel and driver swap, Mobile, AL area', 'Last swap. Then I-10 east to Crestview and FL 85 south.', 'Mobile, AL', true),
+        stop('05:30', 'Arrive Destin', 'Thursday morning arrival. Lodging is booked from Wednesday night.', 'Destin, FL', true)
+      ],
+      thu: [
+        stop('06:20', 'Sunrise on the beach', 'Walk down to the sand for first light over the Gulf.', 'Destin beach, Destin, FL'),
+        stop('07:00', 'Check in and sleep', 'Rest up after the overnight drive.', 'Destin, FL'),
+        stop('12:30', 'Brunch', 'Late Thanksgiving brunch near the lodging.', 'Brunch, Destin, FL'),
+        stop('14:00', 'Henderson Beach State Park', 'White sand dunes and a boardwalk. Park entry fee per vehicle.', 'Henderson Beach State Park, Destin, FL'),
+        stop('16:45', 'Sunset', 'Catch sunset from the beach at Henderson.', 'Henderson Beach State Park, Destin, FL'),
+        stop('18:30', 'Thanksgiving dinner', 'Reservation required. Holiday seatings book up early.', 'Destin, FL')
+      ],
+      fri: [
+        stop('08:30', 'Breakfast', 'Easy start before heading east to 30A.', 'Breakfast, Destin, FL'),
+        stop('09:30', 'Grayton Beach State Park', 'Nature trail around Western Lake, a rare coastal dune lake.', 'Grayton Beach State Park, Santa Rosa Beach, FL'),
+        stop('12:30', 'Lunch at Seaside', 'Food trucks, shops, and the town square.', 'Seaside, FL'),
+        stop('14:30', 'Alys Beach and Rosemary Beach', 'Scenic drive along Scenic Highway 30A. White walls of Alys, then the paths of Rosemary.', 'Rosemary Beach, FL'),
+        stop('16:30', 'Sunset at Grayton Beach', 'Head back west for sunset on the sand.', 'Grayton Beach State Park, Santa Rosa Beach, FL'),
+        stop('18:30', 'Dinner', 'Dinner on 30A or back in Destin.', 'Restaurants, Santa Rosa Beach, FL'),
+        stop('20:00', 'Optional: Black Friday shopping', 'Silver Sands Premium Outlets in Miramar Beach.', 'Silver Sands Premium Outlets, Miramar Beach, FL')
+      ],
+      sat: [
+        stop('09:00', 'Dolphin cruise or harbor boat tour', 'Passes Crab Island. Book ahead and bring a jacket for the water.', 'Destin Harbor, Destin, FL'),
+        stop('12:00', 'Lunch at HarborWalk Village', 'Seafood on the harbor boardwalk.', 'HarborWalk Village, Destin, FL'),
+        stop('13:30', 'Norriego Point walk', 'Easy walk on the sand spit at the mouth of Destin Harbor.', 'Norriego Point, Destin, FL'),
+        stop('15:00', 'Pick one: Gulfarium or Destin Commons', 'Gulfarium Marine Adventure Park on Okaloosa Island, or shopping at Destin Commons.', 'Gulfarium Marine Adventure Park, Fort Walton Beach, FL'),
+        stop('16:45', 'Sunset at the harbor', 'Watch the boats come in at golden hour.', 'Destin Harbor, Destin, FL'),
+        stop('18:30', 'Dinner and holiday lights', 'Village of Baytowne Wharf in Sandestin.', 'Village of Baytowne Wharf, Miramar Beach, FL')
+      ],
+      sun: [
+        stop('08:00', 'Brunch and pack', 'Check out, load the car, one last beach walk.', 'Destin, FL'),
+        stop('10:00', 'Depart Destin', 'Heaviest travel day of the year. Leave on time.', 'Destin, FL'),
+        stop('21:00', 'Arrive Irving (about 9:00 PM)', 'Home sweet home.', 'Irving, TX')
+      ]
+    },
+    legs: {
+      out: [
+        leg('Irving, TX', 'Shreveport, LA', '17:30', '20:30'),
+        leg('Shreveport, LA', 'Jackson, MS', '21:00', '23:45'),
+        leg('Jackson, MS', 'Hattiesburg, MS', '00:00', '01:45'),
+        leg('Hattiesburg, MS', 'Mobile, AL', '02:00', '03:45'),
+        leg('Mobile, AL', 'Destin, FL', '04:00', '05:30')
+      ],
+      ret: [
+        leg('Destin, FL', 'Mobile, AL', '10:00', '12:15'),
+        leg('Mobile, AL', 'Hattiesburg, MS', '12:35', '14:10'),
+        leg('Hattiesburg, MS', 'Jackson, MS', '14:20', '15:45'),
+        leg('Jackson, MS', 'Shreveport, LA', '16:00', '18:50'),
+        leg('Shreveport, LA', 'Irving, TX', '19:10', '21:30')
+      ]
+    },
+    res: [
+      { id: uid(), name: 'Wednesday night lodging (check in on arrival)', status: 'To do', notes: '' },
+      { id: uid(), name: 'Thanksgiving dinner reservation', status: 'To do', notes: '' },
+      { id: uid(), name: 'Dolphin cruise booking (Sat 9:00 AM)', status: 'To do', notes: '' },
+      { id: uid(), name: 'Saturday dinner (Baytowne Wharf)', status: 'To do', notes: '' }
+    ],
+    pack: pack,
+    expenses: [],
+    weatherCache: null,
+    ui: { tab: 'home', day: 'wed', dir: 'out', mapView: 'local', theme: 'auto' }
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* Storage                                                            */
+/* ------------------------------------------------------------------ */
+var storageOk = true;
+function load() {
+  var d = defaults();
+  try {
+    var raw = window.localStorage.getItem(KEY);
+    if (!raw) return d;
+    var s = JSON.parse(raw);
+    if (!s || typeof s !== 'object') return d;
+    Object.keys(d).forEach(function (k) { if (s[k] === undefined) s[k] = d[k]; });
+    s.ui = Object.assign({}, d.ui, s.ui || {});
+    DAYS.forEach(function (k) { if (!Array.isArray(s.days[k])) s.days[k] = d.days[k]; });
+    if (!s.legs.out) s.legs.out = d.legs.out;
+    if (!s.legs.ret) s.legs.ret = d.legs.ret;
+    return s;
+  } catch (e) {
+    storageOk = false;
+    return d;
+  }
+}
+var saveTimer = null;
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveNow, 150);
+}
+function saveNow() {
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(state));
+    storageOk = true;
+  } catch (e) {
+    storageOk = false;
+  }
+  $('storageWarn').style.display = storageOk ? 'none' : 'block';
+}
+var state = load();
+
+/* ------------------------------------------------------------------ */
+/* Lookups                                                            */
+/* ------------------------------------------------------------------ */
+function person(id) { for (var i = 0; i < state.people.length; i++) if (state.people[i].id === id) return state.people[i]; return null; }
+function pname(id) { var p = person(id); return p ? p.name : ''; }
+function stopDate(day, s) { return at(addDays(DATES[day], s.nextDay ? 1 : 0), s.time || '00:00'); }
+function allStops() {
+  var list = [];
+  DAYS.forEach(function (d) { state.days[d].forEach(function (s) { list.push({ day: d, s: s, at: stopDate(d, s) }); }); });
+  list.sort(function (a, b) { return a.at - b.at; });
+  return list;
+}
+function legDate(dir, hhmm) {
+  if (dir === 'ret') return at(DATES.sun, hhmm);
+  var h = +String(hhmm).split(':')[0];
+  return at(h < 12 ? DATES.thu : DATES.wed, hhmm);
+}
+function legTimes(dir, l) {
+  var d = legDate(dir, l.dep), a = legDate(dir, l.arr);
+  if (a < d) a = new Date(a.getTime() + 86400000);
+  return { dep: d, arr: a };
+}
+function dayLabel(day) { return DAY_INFO[day].short + ' ' + DAY_INFO[day].md; }
+
+/* ------------------------------------------------------------------ */
+/* Tabs                                                               */
+/* ------------------------------------------------------------------ */
+var TABS = [
+  { id: 'home', label: 'Home' }, { id: 'days', label: 'Days' }, { id: 'drive', label: 'Drive' },
+  { id: 'map', label: 'Map' }, { id: 'weather', label: 'Weather' }, { id: 'lists', label: 'Lists' }, { id: 'money', label: 'Money' }
+];
+function renderTabbar() {
+  $('tabbar').innerHTML = TABS.map(function (t) {
+    return '<button data-action="tab" data-tab="' + t.id + '"' + (state.ui.tab === t.id ? ' aria-current="page"' : '') + '>' + icon(t.id) + '<span>' + t.label + '</span></button>';
+  }).join('');
+}
+function showTab(id, push) {
+  if (!TABS.some(function (t) { return t.id === id; })) id = 'home';
+  state.ui.tab = id; save();
+  document.querySelectorAll('.view').forEach(function (v) { v.classList.toggle('active', v.id === 'view-' + id); });
+  renderTabbar();
+  if (push !== false) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* ignore */ } }
+  if (id === 'map') initMap();
+  if (id === 'weather') loadWeather(false);
+  window.scrollTo(0, 0);
+}
+
+/* ------------------------------------------------------------------ */
+/* Home                                                               */
+/* ------------------------------------------------------------------ */
+function renderCountdown() {
+  var n = now(), diff = DEPART - n;
+  var end = at(DATES.sun, '23:00');
+  var html;
+  if (diff > 0) {
+    var s = Math.floor(diff / 1000);
+    var d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), sec = s % 60;
+    html = '<div class="spread"><h2>Countdown to departure</h2><span class="pill warn">Wed Nov 25, 5:30 PM</span></div>' +
+      '<div class="countdown"><div><b>' + d + '</b><span>days</span></div><div><b>' + h + '</b><span>hours</span></div><div><b>' + m + '</b><span>min</span></div><div><b>' + sec + '</b><span>sec</span></div></div>';
+  } else if (n < end) {
+    html = '<h2>We are on the trip!</h2><p class="muted">Departed Wed Nov 25 at 5:30 PM. Check the Right now card below.</p>';
+  } else {
+    html = '<h2>Trip complete</h2><p class="muted">Welcome home. Settle up on the Money tab.</p>';
+  }
+  $('countdownCard').innerHTML = html;
+}
+function renderNow() {
+  var n = now(), list = allStops();
+  var start = list.length ? list[0].at : DEPART;
+  var endT = list.length ? new Date(list[list.length - 1].at.getTime() + 3600000) : DEPART;
+  var el = $('homeNow');
+  if (!list.length || n < start || n > endT) { el.innerHTML = ''; return; }
+  var cur = null, next = null;
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].at <= n) cur = list[i]; else { next = list[i]; break; }
+  }
+  var html = '<div class="card now-card"><div class="spread"><h2>Right now</h2><span class="pill live">Live</span></div>';
+  if (cur) {
+    html += '<p><span class="dot" style="background:var(--d-' + cur.day + ')"></span><b>' + esc(cur.s.name) + '</b></p>' +
+      '<p class="small muted">Since ' + fmtTime(cur.s.time) + ' ' + DAY_INFO[cur.day].short + (cur.s.desc ? '. ' + esc(cur.s.desc) : '') + '</p>';
+  }
+  if (next) {
+    html += '<p style="margin-top:10px"><b>Next:</b> ' + esc(next.s.name) + ' at ' + fmtTime(next.s.time) + ' <span class="muted small">(in ' + dur(next.at - n) + ')</span></p>' +
+      '<div class="row" style="margin-top:8px"><a class="btn primary sm" target="_blank" rel="noopener" href="' + mapsUrl(next.s.place || next.s.name) + '">Directions to next stop</a></div>';
+  } else {
+    html += '<p style="margin-top:8px" class="muted">That is the last stop of the trip.</p>';
+  }
+  var duty = onDuty();
+  if (duty) html += '<p class="small" style="margin-top:10px"><b>Driving:</b> ' + esc(duty.text) + '</p>';
+  el.innerHTML = html + '</div>';
+}
+
+/* ------------------------------------------------------------------ */
+/* Itinerary                                                          */
+/* ------------------------------------------------------------------ */
+function renderDayTabs() {
+  $('dayTabs').innerHTML = DAYS.map(function (d) {
+    var list = state.days[d], done = list.filter(function (s) { return s.done; }).length;
+    return '<button role="tab" data-action="day" data-day="' + d + '" aria-selected="' + (state.ui.day === d) + '"><b>' + DAY_INFO[d].short + '</b><span>' + DAY_INFO[d].md + '</span><span class="cnt">' + done + '/' + list.length + ' done</span></button>';
+  }).join('');
+}
+function renderDay() {
+  renderDayTabs();
+  var d = state.ui.day, list = state.days[d];
+  var done = list.filter(function (s) { return s.done; }).length;
+  var html = '<div class="spread" style="margin-top:6px"><div><h2>' + dayLabel(d) + ': ' + DAY_INFO[d].title + '</h2><span class="muted small">' + done + ' of ' + list.length + ' done</span></div>' +
+    '<button class="btn sm ghost" data-action="sortDay">Sort by time</button></div>';
+  if (d === 'sun') html += '<div class="card accent small"><b>Heads up:</b> the Sunday after Thanksgiving is the heaviest travel day of the year. Leave on time.</div>';
+  html += '<ol class="stops" style="--daycolor:var(--d-' + d + ')">';
+  list.forEach(function (s, i) {
+    html += '<li class="stop' + (s.done ? ' done' : '') + '">' +
+      '<label class="check-hit"><input type="checkbox" data-action="toggleStop" data-id="' + s.id + '"' + (s.done ? ' checked' : '') + ' aria-label="Mark ' + esc(s.name) + ' done"></label>' +
+      '<div class="body"><div class="time">' + fmtTime(s.time) + (s.nextDay ? ' ' + DAY_INFO[DAYS[Math.min(DAYS.indexOf(d) + 1, 4)]].short : '') + '</div>' +
+      '<div class="name">' + esc(s.name) + '</div>' + (s.desc ? '<div class="desc">' + esc(s.desc) + '</div>' : '') +
+      '<div class="actions"><a class="btn sm primary" target="_blank" rel="noopener" href="' + mapsUrl(s.place || (s.name + ', Destin, FL')) + '">Directions</a>' +
+      '<button class="icon-btn" data-action="moveStop" data-id="' + s.id + '" data-delta="-1" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>' + icon('up') + '</button>' +
+      '<button class="icon-btn" data-action="moveStop" data-id="' + s.id + '" data-delta="1" aria-label="Move down"' + (i === list.length - 1 ? ' disabled' : '') + '>' + icon('down') + '</button>' +
+      '<button class="icon-btn" data-action="editStop" data-id="' + s.id + '" aria-label="Edit">' + icon('edit') + '</button>' +
+      '<button class="icon-btn" data-action="delStop" data-id="' + s.id + '" aria-label="Delete">' + icon('trash') + '</button>' +
+      '</div></div></li>';
+  });
+  html += '</ol>';
+  if (!list.length) html += '<p class="muted">No stops yet for this day.</p>';
+  html += '<button class="btn sunset block" data-action="addStop" style="margin:6px 0 12px">Add a stop</button>';
+  $('dayView').innerHTML = html;
+}
+function findStop(id) {
+  for (var i = 0; i < DAYS.length; i++) {
+    var list = state.days[DAYS[i]];
+    for (var j = 0; j < list.length; j++) if (list[j].id === id) return { day: DAYS[i], idx: j, s: list[j] };
+  }
+  return null;
+}
+var editing = null;
+function openStopDialog(id) {
+  var f = id ? findStop(id) : null;
+  editing = id || null;
+  $('stopDlgTitle').textContent = f ? 'Edit stop' : 'Add a stop';
+  $('fDay').innerHTML = DAYS.map(function (d) { return '<option value="' + d + '">' + dayLabel(d) + '</option>'; }).join('');
+  $('fDay').value = f ? f.day : state.ui.day;
+  $('fTime').value = f ? f.s.time : '12:00';
+  $('fNext').checked = f ? !!f.s.nextDay : false;
+  $('fName').value = f ? f.s.name : '';
+  $('fDesc').value = f ? f.s.desc : '';
+  $('fPlace').value = f ? f.s.place : '';
+  var dlg = $('stopDialog');
+  dlg.returnValue = '';
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  setTimeout(function () { $('fName').focus(); }, 50);
+}
+$('stopDialog').addEventListener('close', function () {
+  var dlg = $('stopDialog');
+  if (dlg.returnValue !== 'save') return;
+  var name = $('fName').value.trim();
+  if (!name) return;
+  var day = $('fDay').value;
+  var data = { time: $('fTime').value || '12:00', nextDay: $('fNext').checked, name: name, desc: $('fDesc').value.trim(), place: $('fPlace').value.trim() };
+  if (editing) {
+    var f = findStop(editing);
+    if (f) {
+      Object.assign(f.s, data);
+      if (f.day !== day) { state.days[f.day].splice(f.idx, 1); insertByTime(day, f.s); }
+    }
+  } else {
+    insertByTime(day, Object.assign({ id: uid(), done: false }, data));
+  }
+  state.ui.day = day;
+  save(); renderDay(); renderNow();
+  toast(editing ? 'Stop updated' : 'Stop added');
+});
+function insertByTime(day, s) {
+  var list = state.days[day], t = stopDate(day, s), i = 0;
+  while (i < list.length && stopDate(day, list[i]) <= t) i++;
+  list.splice(i, 0, s);
+}
+
+/* ------------------------------------------------------------------ */
+/* Drive plan                                                         */
+/* ------------------------------------------------------------------ */
+function drivers() { return state.people.filter(function (p) { return p.drives; }); }
+function onDuty() {
+  var n = now();
+  var dirs = ['out', 'ret'];
+  for (var k = 0; k < dirs.length; k++) {
+    var dir = dirs[k], legs = state.legs[dir];
+    if (!legs.length) continue;
+    var first = legTimes(dir, legs[0]).dep, last = legTimes(dir, legs[legs.length - 1]).arr;
+    if (n < new Date(first.getTime() - 30 * 60000) || n > new Date(last.getTime() + 60 * 60000)) continue;
+    for (var i = 0; i < legs.length; i++) {
+      var t = legTimes(dir, legs[i]), l = legs[i];
+      var who = (pname(l.driver) || 'Unassigned') + (l.co ? ', co driver ' + pname(l.co) : '');
+      if (n >= t.dep && n < t.arr) {
+        return { dir: dir, text: 'Leg ' + (i + 1) + ', ' + l.from + ' to ' + l.to + '. ' + who + '. ETA ' + fmtTime(l.arr) + '.' };
+      }
+      if (n < t.dep) {
+        return { dir: dir, text: 'Stop and swap. Next up: Leg ' + (i + 1) + ' to ' + l.to + ' at ' + fmtTime(l.dep) + ', ' + who + '.' };
+      }
+    }
+    return { dir: dir, text: 'Drive complete. Arrived ' + legs[legs.length - 1].to + '.' };
+  }
+  return null;
+}
+function renderDriveBanner() {
+  var d = onDuty();
+  $('driveBanner').innerHTML = d ? '<div class="banner">On duty now<div class="small">' + esc(d.text) + '</div></div>' : '';
+}
+function personOptions(selected, onlyDrivers, blankLabel) {
+  var list = onlyDrivers ? drivers() : state.people;
+  var html = '<option value="">' + (blankLabel || 'Choose') + '</option>';
+  list.forEach(function (p) { html += '<option value="' + p.id + '"' + (p.id === selected ? ' selected' : '') + '>' + esc(p.name) + '</option>'; });
+  if (selected && !list.some(function (p) { return p.id === selected; }) && person(selected)) {
+    html += '<option value="' + selected + '" selected>' + esc(pname(selected)) + '</option>';
+  }
+  return html;
+}
+function renderDrive() {
+  var dir = state.ui.dir;
+  document.querySelectorAll('[data-action="dir"]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.dir === dir)); });
+  var legs = state.legs[dir];
+  var html = '';
+  if (dir === 'out') {
+    html += '<div class="card sea"><h2>Outbound: Wed Nov 25, overnight</h2>' +
+      '<p><b>Route:</b> Irving, I-20 east via Shreveport to Jackson MS, US 49 south to Hattiesburg, US 98 to Mobile, I-10 east to Crestview, FL 85 south to Destin.</p>' +
+      '<div class="facts" style="margin-top:8px"><div class="fact"><b>About 700 mi</b><span>Distance</span></div><div class="fact"><b>10 to 11 hr</b><span>Driving time</span></div><div class="fact"><b>5:30 PM</b><span>Depart Irving</span></div><div class="fact"><b>5:30 AM Thu</b><span>Arrive Destin</span></div></div>' +
+      '<p class="small muted" style="margin-top:8px">Leg times follow the plan and are tight. Mobile to Destin is about 150 miles, so a 6:00 AM arrival is realistic. That is still before sunrise.</p></div>';
+  } else {
+    html += '<div class="card accent"><h2>Return: Sun Nov 29</h2>' +
+      '<p><b>Route:</b> The same roads in reverse. FL 85 north to Crestview, I-10 west to Mobile, US 98 to Hattiesburg, US 49 north to Jackson, I-20 west through Shreveport to Irving.</p>' +
+      '<div class="facts" style="margin-top:8px"><div class="fact"><b>10:00 AM</b><span>Depart Destin</span></div><div class="fact"><b>About 9:00 PM</b><span>Arrive Irving</span></div></div>' +
+      '<p style="margin-top:8px"><b>Note:</b> The Sunday after Thanksgiving is the heaviest travel day of the year. Leave early, expect slow traffic on I-10 and I-20, and plan for a 9:00 to 10:00 PM arrival.</p></div>';
+  }
+  html += '<div class="card"><div class="spread"><h2>Legs</h2><span class="pill">' + legs.filter(function (l) { return l.done; }).length + ' of ' + legs.length + ' done</span></div>' +
+    '<table class="legs"><thead><tr><th>#</th><th>From</th><th>To</th><th>Depart</th><th>Arrive</th><th>Driver</th><th>Co driver</th><th>Done</th></tr></thead><tbody>';
+  legs.forEach(function (l, i) {
+    var warn = '';
+    if (l.driver && i > 0 && legs[i - 1].driver === l.driver) warn = '<div class="warn-text">Drove the previous leg too</div>';
+    if (l.driver && l.driver === l.co) warn += '<div class="warn-text">Driver and co driver are the same</div>';
+    html += '<tr>' +
+      '<td class="leghead" data-label="Leg"><span class="dot" style="background:var(--d-' + (dir === 'out' ? 'wed' : 'sun') + ')"></span>Leg ' + (i + 1) + '<span class="mobile-only muted small">: ' + esc(l.from) + ' to ' + esc(l.to) + '</span></td>' +
+      '<td class="fromto" data-label="From">' + esc(l.from) + '</td><td class="fromto" data-label="To">' + esc(l.to) + '</td>' +
+      '<td data-label="Depart"><input type="time" value="' + l.dep + '" data-action="legField" data-field="dep" data-id="' + l.id + '" aria-label="Leg ' + (i + 1) + ' departure"></td>' +
+      '<td data-label="Arrive"><input type="time" value="' + l.arr + '" data-action="legField" data-field="arr" data-id="' + l.id + '" aria-label="Leg ' + (i + 1) + ' arrival"></td>' +
+      '<td data-label="Driver"><div><select data-action="legField" data-field="driver" data-id="' + l.id + '" aria-label="Leg ' + (i + 1) + ' driver">' + personOptions(l.driver, true, 'Driver') + '</select>' + warn + '</div></td>' +
+      '<td data-label="Co driver"><select data-action="legField" data-field="co" data-id="' + l.id + '" aria-label="Leg ' + (i + 1) + ' co driver">' + personOptions(l.co, false, 'Co driver') + '</select></td>' +
+      '<td data-label="Done"><label class="check-hit" style="justify-content:flex-start"><input type="checkbox" data-action="legDone" data-id="' + l.id + '"' + (l.done ? ' checked' : '') + ' aria-label="Leg ' + (i + 1) + ' done"></label></td>' +
+      '</tr>';
+  });
+  html += '</tbody></table>' +
+    '<div class="grid2" style="margin-top:10px"><button class="btn sunset" data-action="autoAssign">Auto assign drivers</button><button class="btn ghost" data-action="clearAssign">Clear</button></div>' +
+    '<p class="small muted" style="margin-top:6px">Auto assign rotates through everyone marked "Drives" so nobody drives two legs in a row, and picks a co driver who is not up next so the next driver can sleep.</p></div>';
+  $('driveView').innerHTML = html;
+  renderDriveBanner();
+}
+function renderPeople() {
+  $('peopleList').innerHTML = state.people.map(function (p) {
+    return '<div class="person-row"><input type="text" value="' + esc(p.name) + '" data-action="personName" data-id="' + p.id + '" aria-label="Traveler name" maxlength="30">' +
+      '<label><input type="checkbox" data-action="personDrives" data-id="' + p.id + '"' + (p.drives ? ' checked' : '') + '> Drives</label>' +
+      '<button class="icon-btn" data-action="delPerson" data-id="' + p.id + '" aria-label="Remove ' + esc(p.name) + '">' + icon('trash') + '</button></div>';
+  }).join('') || '<p class="muted">Add the people on the trip.</p>';
+}
+function autoAssign() {
+  var ds = drivers();
+  if (ds.length < 2) { toast('Mark at least 2 people as drivers'); return; }
+  var n = ds.length;
+  ['out', 'ret'].forEach(function (dir, k) {
+    var offset = k === 0 ? 0 : state.legs.out.length % n;
+    state.legs[dir].forEach(function (l, i) {
+      var di = (i + offset) % n;
+      l.driver = ds[di].id;
+      // Co driver: avoid the next driver (they rest) when possible
+      var ci = n >= 3 ? (di + 2) % n : (di + 1) % n;
+      l.co = ds[ci].id;
+    });
+  });
+  save(); renderDrive(); renderNow();
+  toast('Drivers assigned for both drives');
+}
+
+/* ------------------------------------------------------------------ */
+/* Map                                                                */
+/* ------------------------------------------------------------------ */
+var map = null, mapTries = 0;
+function dayColor(day) { return getComputedStyle(document.documentElement).getPropertyValue('--d-' + day).trim() || '#0f8b7a'; }
+function popupHtml(name, sub, q) {
+  return '<b>' + esc(name) + '</b><br><span style="color:#666">' + esc(sub) + '</span><br>' +
+    '<a class="btn primary sm" style="margin-top:6px" target="_blank" rel="noopener" href="' + mapsUrl(q) + '">Directions</a>';
+}
+function initMap() {
+  renderMapButtons();
+  renderPlaceList();
+  if (map) { setTimeout(function () { map.invalidateSize(); setMapView(); }, 60); return; }
+  if (!window.L) {
+    if (mapTries++ < 20) { setTimeout(initMap, 300); return; }
+    $('map').innerHTML = '<div style="padding:20px" class="muted">The map could not load (offline or blocked). Use the place list below for directions.</div>';
+    return;
+  }
+  map = L.map('map', { zoomControl: true, tap: true });
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  L.polyline(ROUTE_LINE, { color: dayColor('drive'), weight: 4, opacity: .7, dashArray: '6 6' }).addTo(map);
+  ROUTE_STOPS.forEach(function (p) {
+    L.circleMarker([p.lat, p.lng], { radius: 9, color: '#fff', weight: 2, fillColor: dayColor('drive'), fillOpacity: 1 })
+      .addTo(map).bindPopup(popupHtml(p.name, 'Wed night drive and Sun drive home', p.q), { closeButton: false });
+  });
+  PLACES.forEach(function (p) {
+    L.circleMarker([p.lat, p.lng], { radius: 10, color: '#fff', weight: 2, fillColor: dayColor(p.day), fillOpacity: 1 })
+      .addTo(map).bindPopup(popupHtml(p.name, dayLabel(p.day) + ': ' + DAY_INFO[p.day].title, p.q), { closeButton: false });
+  });
+  setTimeout(function () { map.invalidateSize(); setMapView(); }, 60);
+}
+function setMapView() {
+  if (!map) return;
+  var pts = state.ui.mapView === 'route' ? ROUTE_LINE : PLACES.map(function (p) { return [p.lat, p.lng]; });
+  map.fitBounds(L.latLngBounds(pts), { padding: [24, 24] });
+}
+function renderMapButtons() {
+  document.querySelectorAll('[data-action="mapview"]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.view === state.ui.mapView)); });
+  $('mapLegend').innerHTML = ['thu', 'fri', 'sat'].map(function (d) {
+    return '<span><span class="dot" style="background:var(--d-' + d + ')"></span>' + dayLabel(d) + ' ' + DAY_INFO[d].title + '</span>';
+  }).join('') + '<span><span class="dot" style="background:var(--d-drive)"></span>Drive stops</span>';
+}
+function renderPlaceList() {
+  var html = '<h2>Places</h2><ul class="plain">';
+  PLACES.forEach(function (p) {
+    html += '<li class="spread" style="padding:6px 0;border-bottom:1px solid var(--border)"><span><span class="dot" style="background:var(--d-' + p.day + ')"></span>' + esc(p.name) + ' <span class="muted small">' + DAY_INFO[p.day].short + '</span></span>' +
+      '<a class="btn sm" target="_blank" rel="noopener" href="' + mapsUrl(p.q) + '">Directions</a></li>';
+  });
+  ROUTE_STOPS.forEach(function (p) {
+    html += '<li class="spread" style="padding:6px 0;border-bottom:1px solid var(--border)"><span><span class="dot" style="background:var(--d-drive)"></span>' + esc(p.name) + '</span>' +
+      '<a class="btn sm" target="_blank" rel="noopener" href="' + mapsUrl(p.q) + '">Directions</a></li>';
+  });
+  $('placeList').innerHTML = html + '</ul>';
+}
+
+/* ------------------------------------------------------------------ */
+/* Weather                                                            */
+/* ------------------------------------------------------------------ */
+var WX_CITIES = [
+  { key: 'destin', name: 'Destin, FL', lat: 30.3935, lon: -86.4958, climate: { hi: 66, lo: 50, rain: 25, wind: 10 } },
+  { key: 'irving', name: 'Irving, TX', lat: 32.8140, lon: -96.9489, climate: { hi: 63, lo: 42, rain: 20, wind: 11 } }
+];
+var WX_DATES = DAYS.map(function (d) { return DATES[d]; });
+var wxLoading = false, wxError = '', wxLastTry = 0;
+function loadWeather(force) {
+  renderWeather();
+  if (wxLoading) return;
+  var c = state.weatherCache;
+  if (!force && c && Date.now() - c.fetchedAt < 3 * 3600000) return;
+  if (!force && Date.now() - wxLastTry < 60000) return;
+  wxLoading = true; wxError = ''; wxLastTry = Date.now(); renderWeather();
+  var params = 'daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max' +
+    '&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FChicago&forecast_days=16';
+  var reqs = WX_CITIES.map(function (city) {
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + city.lat + '&longitude=' + city.lon + '&' + params;
+    return fetch(url).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function (j) {
+      var out = {};
+      var d = j.daily || {};
+      (d.time || []).forEach(function (t, i) {
+        if (WX_DATES.indexOf(t) >= 0) {
+          out[t] = { hi: d.temperature_2m_max[i], lo: d.temperature_2m_min[i], rain: d.precipitation_probability_max ? d.precipitation_probability_max[i] : null, wind: d.wind_speed_10m_max[i] };
+        }
+      });
+      return out;
+    });
+  });
+  Promise.all(reqs).then(function (res) {
+    var data = {};
+    WX_CITIES.forEach(function (c, i) { data[c.key] = res[i]; });
+    state.weatherCache = { fetchedAt: Date.now(), data: data };
+    save();
+  }).catch(function (e) {
+    wxError = 'Could not reach the forecast service (' + (e && e.message ? e.message : 'network error') + ').';
+  }).then(function () { wxLoading = false; renderWeather(); });
+}
+function fmtStamp(ms) {
+  var d = new Date(ms);
+  var mo = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()];
+  var h = d.getHours(), m = d.getMinutes();
+  return mo + ' ' + d.getDate() + ', ' + fmtTime((h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m);
+}
+function renderWeather() {
+  var c = state.weatherCache;
+  var liveCount = 0, total = 0;
+  WX_CITIES.forEach(function (city) {
+    WX_DATES.forEach(function (dt) { total++; if (c && c.data && c.data[city.key] && c.data[city.key][dt]) liveCount++; });
+  });
+  var status;
+  if (wxLoading) status = '<span class="pill">Loading forecast...</span>';
+  else if (liveCount === total) status = '<span class="pill live">Live forecast</span>';
+  else if (liveCount > 0) status = '<span class="pill warn">Partly live</span>';
+  else status = '<span class="pill warn">Typical climate</span>';
+  var msg = '';
+  if (liveCount === 0) {
+    msg = '<p><b>Showing typical late November climate, not a forecast.</b> ' +
+      (wxError ? esc(wxError) + ' ' : 'Live forecasts only reach about 16 days ahead, so Nov 25 to 29 is not in range yet. ') +
+      'Check back from about Nov 10 for live numbers.</p>';
+  } else if (liveCount < total) {
+    msg = '<p>Days marked <b>Live</b> come from the Open-Meteo forecast. Days marked <b>Typical</b> are beyond the forecast range and show late November averages.</p>';
+  } else {
+    msg = '<p>Daily forecast from Open-Meteo. Forecasts more than a week out can still change a lot.</p>';
+  }
+  if (c && liveCount > 0) msg += '<p class="small muted">Updated ' + fmtStamp(c.fetchedAt) + (wxError ? '. Latest refresh failed, showing saved data.' : '') + '</p>';
+  $('wxStatus').innerHTML = '<div class="spread"><h2>Weather, Nov 25 to 29</h2>' + status + '</div>' + msg +
+    '<button class="btn sm" data-action="wxRefresh" style="margin-top:6px"' + (wxLoading ? ' disabled' : '') + '>Refresh forecast</button>';
+  $('wxTables').innerHTML = WX_CITIES.map(function (city) {
+    var rows = WX_DATES.map(function (dt, i) {
+      var live = c && c.data && c.data[city.key] && c.data[city.key][dt];
+      var v = live || city.climate;
+      var rain = v.rain == null ? '--' : Math.round(v.rain) + '%';
+      return '<tr><td><b>' + DAY_INFO[DAYS[i]].short + '</b> ' + DAY_INFO[DAYS[i]].md + '</td>' +
+        '<td class="num">' + Math.round(v.hi) + ' / ' + Math.round(v.lo) + ' F</td><td class="num">' + rain + '</td><td class="num">' + Math.round(v.wind) + ' mph</td>' +
+        '<td><span class="pill src ' + (live ? 'live' : '') + '">' + (live ? 'Live' : 'Typical') + '</span></td></tr>';
+    }).join('');
+    return '<div class="card"><h3>' + esc(city.name) + '</h3><div style="overflow-x:auto"><table class="wx"><thead><tr><th>Day</th><th>High / Low</th><th>Rain</th><th>Wind</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      (city.key === 'destin' ? '<p class="small muted">Gulf water about 66 F in late November. Great for walks, too cold to swim.</p>' : '<p class="small muted">Irving matters for departure Wednesday evening and arrival Sunday night.</p>') + '</div>';
+  }).join('');
+}
+
+/* ------------------------------------------------------------------ */
+/* Checklists                                                         */
+/* ------------------------------------------------------------------ */
+function renderLists() {
+  var booked = state.res.filter(function (r) { return r.status === 'Booked' || r.status === 'Confirmed'; }).length;
+  $('resCount').textContent = booked + ' of ' + state.res.length + ' booked';
+  $('resList').innerHTML = state.res.map(function (r) {
+    return '<div class="res"><div class="spread"><b class="status-' + r.status.replace(' ', '-') + '">' + esc(r.name) + '</b>' +
+      '<button class="icon-btn" data-action="delRes" data-id="' + r.id + '" aria-label="Delete ' + esc(r.name) + '">' + icon('trash') + '</button></div>' +
+      '<div class="grid2" style="margin-top:6px"><select data-action="resStatus" data-id="' + r.id + '" aria-label="Status">' +
+      RES_STATUS.map(function (s) { return '<option' + (s === r.status ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select>' +
+      '<input type="text" value="' + esc(r.notes) + '" data-action="resNotes" data-id="' + r.id + '" placeholder="Confirmation #, time, notes" aria-label="Notes for ' + esc(r.name) + '"></div></div>';
+  }).join('') || '<p class="muted">No reservations yet.</p>';
+
+  var done = state.pack.filter(function (p) { return p.done; }).length;
+  $('packCount').textContent = done + ' of ' + state.pack.length + ' packed';
+  $('packBar').style.width = (state.pack.length ? Math.round(done / state.pack.length * 100) : 0) + '%';
+  var cats = PACK_CATS.slice();
+  state.pack.forEach(function (p) { if (cats.indexOf(p.cat) < 0) cats.push(p.cat); });
+  $('packList').innerHTML = cats.map(function (cat) {
+    var items = state.pack.filter(function (p) { return p.cat === cat; });
+    if (!items.length) return '';
+    return '<h3 style="margin:14px 0 4px">' + esc(cat) + '</h3>' + items.map(function (p) {
+      return '<div class="item' + (p.done ? ' done' : '') + '"><label class="check-hit"><input type="checkbox" data-action="packDone" data-id="' + p.id + '"' + (p.done ? ' checked' : '') + ' aria-label="Packed ' + esc(p.text) + '"></label>' +
+        '<span class="txt">' + esc(p.text) + '</span>' +
+        '<select data-action="packWho" data-id="' + p.id + '" aria-label="Assign ' + esc(p.text) + '">' + personOptions(p.who, false, 'Anyone') + '</select>' +
+        '<button class="icon-btn" data-action="delPack" data-id="' + p.id + '" aria-label="Delete ' + esc(p.text) + '">' + icon('trash') + '</button></div>';
+    }).join('');
+  }).join('');
+  var cv = $('newPackCat').value, wv = $('newPackWho').value;
+  $('newPackCat').innerHTML = PACK_CATS.map(function (c) { return '<option>' + c + '</option>'; }).join('');
+  if (cv) $('newPackCat').value = cv;
+  $('newPackWho').innerHTML = personOptions(wv, false, 'Anyone');
+}
+
+/* ------------------------------------------------------------------ */
+/* Expenses                                                           */
+/* ------------------------------------------------------------------ */
+function shares(e) {
+  // Split amount (cents) evenly; leftover cents go to the first people in the split
+  var ids = e.split.filter(function (id) { return person(id); });
+  if (!ids.length) return {};
+  var base = Math.floor(e.cents / ids.length), rem = e.cents - base * ids.length, out = {};
+  ids.forEach(function (id, i) { out[id] = base + (i < rem ? 1 : 0); });
+  return out;
+}
+function computeBalances() {
+  var b = {};
+  state.people.forEach(function (p) { b[p.id] = { paid: 0, share: 0 }; });
+  state.expenses.forEach(function (e) {
+    if (b[e.paidBy]) b[e.paidBy].paid += e.cents;
+    var s = shares(e);
+    Object.keys(s).forEach(function (id) { if (b[id]) b[id].share += s[id]; });
+  });
+  return b;
+}
+function settle(b) {
+  var cred = [], debt = [];
+  Object.keys(b).forEach(function (id) {
+    var net = b[id].paid - b[id].share;
+    if (net > 0) cred.push({ id: id, amt: net }); else if (net < 0) debt.push({ id: id, amt: -net });
+  });
+  // Pair off exact matches first, then greedily match largest debtor with largest creditor
+  var tx = [];
+  for (var i = debt.length - 1; i >= 0; i--) {
+    for (var j = 0; j < cred.length; j++) {
+      if (cred[j].amt === debt[i].amt) { tx.push({ from: debt[i].id, to: cred[j].id, amt: debt[i].amt }); cred.splice(j, 1); debt.splice(i, 1); break; }
+    }
+  }
+  cred.sort(function (a, b) { return b.amt - a.amt; });
+  debt.sort(function (a, b) { return b.amt - a.amt; });
+  while (cred.length && debt.length) {
+    var c = cred[0], d = debt[0], amt = Math.min(c.amt, d.amt);
+    tx.push({ from: d.id, to: c.id, amt: amt });
+    c.amt -= amt; d.amt -= amt;
+    if (!c.amt) cred.shift();
+    if (!d.amt) debt.shift();
+    cred.sort(function (a, b) { return b.amt - a.amt; });
+    debt.sort(function (a, b) { return b.amt - a.amt; });
+  }
+  return tx;
+}
+function renderMoney() {
+  var total = state.expenses.reduce(function (a, e) { return a + e.cents; }, 0);
+  var b = computeBalances();
+  var n = state.people.length || 1;
+  $('moneySummary').innerHTML =
+    '<div class="fact"><b>' + money(total) + '</b><span>Total spent</span></div>' +
+    '<div class="fact"><b>' + money(total / n) + '</b><span>Average per person</span></div>' +
+    '<div class="fact"><b>' + state.expenses.length + '</b><span>Expenses</span></div>';
+  var byCat = {};
+  state.expenses.forEach(function (e) { byCat[e.cat] = (byCat[e.cat] || 0) + e.cents; });
+  $('catTotals').innerHTML = Object.keys(CATS).map(function (k) { return CATS[k] + ': ' + money(byCat[k] || 0); }).join(' | ');
+
+  var paidSel = $('expPaid'), pv = paidSel.value;
+  paidSel.innerHTML = state.people.map(function (p) { return '<option value="' + p.id + '">' + esc(p.name) + '</option>'; }).join('');
+  if (pv && person(pv)) paidSel.value = pv;
+  var prevChecked = {};
+  $('expSplit').querySelectorAll('input').forEach(function (i) { prevChecked[i.value] = i.checked; });
+  $('expSplit').innerHTML = state.people.map(function (p) {
+    var chk = prevChecked[p.id] === undefined ? true : prevChecked[p.id];
+    return '<label><input type="checkbox" value="' + p.id + '"' + (chk ? ' checked' : '') + '>' + esc(p.name) + '</label>';
+  }).join('');
+
+  var tx = settle(b);
+  $('settle').innerHTML = !state.expenses.length ? '<p class="muted">Add expenses to see who owes whom.</p>' :
+    !tx.length ? '<p class="bal-pos">Everyone is settled up.</p>' :
+    '<p class="small muted">' + plural(tx.length, 'payment') + ' settles everything.</p><ul class="plain settle">' + tx.map(function (t) {
+      return '<li><b>' + esc(pname(t.from)) + '</b> pays <b>' + esc(pname(t.to)) + '</b> <span class="amt bal-pos" style="float:right">' + money(t.amt) + '</span></li>';
+    }).join('') + '</ul>';
+
+  $('balances').innerHTML = '<table class="wx"><thead><tr><th>Person</th><th>Paid</th><th>Share</th><th>Balance</th></tr></thead><tbody>' +
+    state.people.map(function (p) {
+      var x = b[p.id], net = x.paid - x.share;
+      return '<tr><td>' + esc(p.name) + '</td><td class="num">' + money(x.paid) + '</td><td class="num">' + money(x.share) + '</td><td class="num ' + (net > 0 ? 'bal-pos' : net < 0 ? 'bal-neg' : '') + '">' + (net > 0 ? '+' : '') + money(net) + '</td></tr>';
+    }).join('') + '</tbody></table><p class="small muted" style="margin-top:6px">Share is each person\'s part of the expenses they were split on. Positive balance means they are owed money.</p>';
+
+  $('expList').innerHTML = state.expenses.length ? state.expenses.slice().reverse().map(function (e) {
+    var names = e.split.map(pname).filter(Boolean).join(', ');
+    return '<div class="exp"><div style="flex:1;min-width:0"><b>' + esc(e.desc) + '</b><div class="small muted">' + CATS[e.cat] + ' | paid by ' + esc(pname(e.paidBy) || 'unknown') + ' | split: ' + esc(names) + '</div></div>' +
+      '<span class="amt">' + money(e.cents) + '</span><button class="icon-btn" data-action="delExp" data-id="' + e.id + '" aria-label="Delete ' + esc(e.desc) + '">' + icon('trash') + '</button></div>';
+  }).join('') : '<p class="muted">No expenses yet.</p>';
+}
+
+/* ------------------------------------------------------------------ */
+/* Share / copy                                                       */
+/* ------------------------------------------------------------------ */
+function itineraryText() {
+  var lines = ['DESTIN THANKSGIVING ROAD TRIP 2026', 'Irving, TX to Destin, FL. All times Central.', ''];
+  DAYS.forEach(function (d) {
+    lines.push(dayLabel(d).toUpperCase() + ': ' + DAY_INFO[d].title);
+    state.days[d].forEach(function (s) {
+      lines.push('- ' + fmtTime(s.time) + (s.nextDay ? ' (' + DAY_INFO[DAYS[Math.min(DAYS.indexOf(d) + 1, 4)]].short + ')' : '') + ': ' + s.name + (s.done ? ' [done]' : ''));
+    });
+    lines.push('');
+  });
+  [['out', 'DRIVERS, OUTBOUND (WED NIGHT)'], ['ret', 'DRIVERS, RETURN (SUN)']].forEach(function (pair) {
+    var legs = state.legs[pair[0]];
+    if (!legs.some(function (l) { return l.driver; })) return;
+    lines.push(pair[1]);
+    legs.forEach(function (l, i) {
+      lines.push('- Leg ' + (i + 1) + ', ' + fmtTime(l.dep) + ' ' + l.from + ' to ' + l.to + ': ' + (pname(l.driver) || 'TBD') + (l.co ? ' (co: ' + pname(l.co) + ')' : ''));
+    });
+    lines.push('');
+  });
+  lines.push('Route: I-20 east to Jackson, US 49 south to Hattiesburg, US 98 to Mobile, I-10 east to Crestview, FL 85 south to Destin. About 700 miles.');
+  lines.push('Return Sun 10:00 AM. Heaviest travel day of the year, leave on time.');
+  return lines.join('\n');
+}
+function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallbackCopy(text); });
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+  document.body.appendChild(ta); ta.select();
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+function doCopy() {
+  copyText(itineraryText()).then(function (ok) { toast(ok ? 'Itinerary copied. Paste it in the group chat.' : 'Copy failed. Long press to copy instead.'); });
+}
+function doShare() {
+  var text = itineraryText();
+  if (navigator.share) {
+    navigator.share({ title: 'Destin Thanksgiving Road Trip', text: text }).catch(function (e) { if (e && e.name !== 'AbortError') doCopy(); });
+  } else {
+    doCopy();
+  }
+}
+
+var toastTimer;
+function toast(msg) {
+  var t = $('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.classList.remove('show'); }, 2400);
+}
+
+/* ------------------------------------------------------------------ */
+/* Theme                                                              */
+/* ------------------------------------------------------------------ */
+function applyTheme() {
+  var t = state.ui.theme;
+  if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  else document.documentElement.removeAttribute('data-theme');
+  $('themeSelect').value = t || 'auto';
+}
+
+/* ------------------------------------------------------------------ */
+/* Events                                                             */
+/* ------------------------------------------------------------------ */
+function renameOptions(p) {
+  document.querySelectorAll('#driveView option[value="' + p.id + '"]').forEach(function (o) { o.textContent = p.name; });
+}
+function findIn(arr, id) { for (var i = 0; i < arr.length; i++) if (arr[i].id === id) return arr[i]; return null; }
+function findLeg(id) { return findIn(state.legs.out, id) || findIn(state.legs.ret, id); }
+function renderAll() {
+  renderTabbar(); renderCountdown(); renderNow(); renderDay(); renderDrive(); renderPeople(); renderLists(); renderMoney();
+  $('tripNotes').value = state.notes || '';
+  applyTheme();
+}
+
+document.addEventListener('click', function (ev) {
+  var el = ev.target.closest('[data-action]');
+  if (!el) return;
+  var a = el.dataset.action, id = el.dataset.id;
+  if (el.tagName === 'INPUT' || el.tagName === 'SELECT') return; // handled by change
+  switch (a) {
+    case 'tab': showTab(el.dataset.tab); break;
+    case 'day': state.ui.day = el.dataset.day; save(); renderDay(); break;
+    case 'addStop': openStopDialog(null); break;
+    case 'editStop': openStopDialog(id); break;
+    case 'delStop': {
+      var f = findStop(id);
+      if (f && confirm('Delete "' + f.s.name + '"?')) { state.days[f.day].splice(f.idx, 1); save(); renderDay(); renderNow(); }
+      break;
+    }
+    case 'moveStop': {
+      var g = findStop(id), delta = +el.dataset.delta, list = g && state.days[g.day], to = g ? g.idx + delta : -1;
+      if (g && to >= 0 && to < list.length) { list.splice(g.idx, 1); list.splice(to, 0, g.s); save(); renderDay(); }
+      break;
+    }
+    case 'sortDay': {
+      var d = state.ui.day;
+      state.days[d].sort(function (x, y) { return stopDate(d, x) - stopDate(d, y); });
+      save(); renderDay(); toast('Sorted by time'); break;
+    }
+    case 'dir': state.ui.dir = el.dataset.dir; save(); renderDrive(); break;
+    case 'autoAssign': autoAssign(); break;
+    case 'clearAssign':
+      if (confirm('Clear driver assignments for both drives?')) {
+        ['out', 'ret'].forEach(function (k) { state.legs[k].forEach(function (l) { l.driver = ''; l.co = ''; }); });
+        save(); renderDrive(); renderNow();
+      }
+      break;
+    case 'addPerson': {
+      var name = $('newPerson').value.trim();
+      if (!name) { $('newPerson').focus(); return; }
+      state.people.push({ id: uid(), name: name, drives: true });
+      $('newPerson').value = '';
+      save(); renderPeople(); renderDrive(); renderLists(); renderMoney(); break;
+    }
+    case 'delPerson': {
+      var p = person(id);
+      if (!p) return;
+      if (state.expenses.some(function (e) { return e.paidBy === id || e.split.indexOf(id) >= 0; })) {
+        alert(p.name + ' is part of recorded expenses. Delete or change those expenses first.');
+        return;
+      }
+      if (!confirm('Remove ' + p.name + '?')) return;
+      state.people = state.people.filter(function (x) { return x.id !== id; });
+      ['out', 'ret'].forEach(function (k) { state.legs[k].forEach(function (l) { if (l.driver === id) l.driver = ''; if (l.co === id) l.co = ''; }); });
+      state.pack.forEach(function (x) { if (x.who === id) x.who = ''; });
+      save(); renderPeople(); renderDrive(); renderLists(); renderMoney(); break;
+    }
+    case 'mapview': state.ui.mapView = el.dataset.view; save(); renderMapButtons(); setMapView(); break;
+    case 'wxRefresh': loadWeather(true); break;
+    case 'addRes': {
+      var rn = $('newRes').value.trim();
+      if (!rn) { $('newRes').focus(); return; }
+      state.res.push({ id: uid(), name: rn, status: 'To do', notes: '' });
+      $('newRes').value = ''; save(); renderLists(); break;
+    }
+    case 'delRes': {
+      var r = findIn(state.res, id);
+      if (r && confirm('Delete "' + r.name + '"?')) { state.res = state.res.filter(function (x) { return x.id !== id; }); save(); renderLists(); }
+      break;
+    }
+    case 'addPack': {
+      var t = $('newPack').value.trim();
+      if (!t) { $('newPack').focus(); return; }
+      state.pack.push({ id: uid(), text: t, cat: $('newPackCat').value, who: $('newPackWho').value, done: false });
+      $('newPack').value = ''; save(); renderLists(); toast('Added to ' + $('newPackCat').value); break;
+    }
+    case 'delPack': state.pack = state.pack.filter(function (x) { return x.id !== id; }); save(); renderLists(); break;
+    case 'addExp': {
+      var desc = $('expDesc').value.trim();
+      var amt = parseFloat($('expAmt').value);
+      var split = Array.prototype.map.call($('expSplit').querySelectorAll('input:checked'), function (i) { return i.value; });
+      if (!desc) { toast('Add a description'); $('expDesc').focus(); return; }
+      if (!(amt > 0)) { toast('Enter an amount'); $('expAmt').focus(); return; }
+      if (!$('expPaid').value) { toast('Add travelers on the Drive tab first'); return; }
+      if (!split.length) { toast('Pick at least one person to split with'); return; }
+      state.expenses.push({ id: uid(), desc: desc, cents: Math.round(amt * 100), cat: $('expCat').value, paidBy: $('expPaid').value, split: split, at: Date.now() });
+      $('expDesc').value = ''; $('expAmt').value = '';
+      save(); renderMoney(); toast('Expense added'); break;
+    }
+    case 'delExp': {
+      var e = findIn(state.expenses, id);
+      if (e && confirm('Delete "' + e.desc + '" (' + money(e.cents) + ')?')) { state.expenses = state.expenses.filter(function (x) { return x.id !== id; }); save(); renderMoney(); }
+      break;
+    }
+    case 'share': doShare(); break;
+    case 'copy': doCopy(); break;
+    case 'reset':
+      if (confirm('Reset everything to the default plan? This clears your edits, checkmarks, drivers, expenses, and notes.')) {
+        var keepTheme = state.ui.theme;
+        state = defaults();
+        state.ui.theme = keepTheme;
+        state.ui.tab = 'home';
+        saveNow(); renderAll(); if (map) setMapView(); toast('Reset to the default plan');
+      }
+      break;
+  }
+});
+
+document.addEventListener('change', function (ev) {
+  var el = ev.target, a = el.dataset && el.dataset.action, id = el.dataset && el.dataset.id;
+  if (el.id === 'themeSelect') { state.ui.theme = el.value; save(); applyTheme(); return; }
+  if (!a) return;
+  switch (a) {
+    case 'toggleStop': { var f = findStop(id); if (f) { f.s.done = el.checked; save(); renderDay(); } break; }
+    case 'legField': {
+      var l = findLeg(id); if (!l) return;
+      l[el.dataset.field] = el.value; save(); renderDrive(); renderNow(); break;
+    }
+    case 'legDone': { var l2 = findLeg(id); if (l2) { l2.done = el.checked; save(); renderDrive(); } break; }
+    case 'personName': {
+      var p = person(id); if (!p) return;
+      p.name = el.value.trim() || p.name; el.value = p.name;
+      // Update names in place: re-rendering the drive table here would swallow a tap on its buttons
+      renameOptions(p); save(); renderLists(); renderMoney(); renderNow(); break;
+    }
+    case 'personDrives': { var q = person(id); if (q) { q.drives = el.checked; save(); renderDrive(); } break; }
+    case 'resStatus': { var r = findIn(state.res, id); if (r) { r.status = el.value; save(); renderLists(); } break; }
+    case 'resNotes': { var r2 = findIn(state.res, id); if (r2) { r2.notes = el.value; save(); } break; }
+    case 'packDone': { var pk = findIn(state.pack, id); if (pk) { pk.done = el.checked; save(); renderLists(); } break; }
+    case 'packWho': { var pw = findIn(state.pack, id); if (pw) { pw.who = el.value; save(); } break; }
+  }
+});
+
+// Save text fields as you type (no re-render so focus stays put)
+document.addEventListener('input', function (ev) {
+  var el = ev.target, a = el.dataset && el.dataset.action, id = el.dataset && el.dataset.id;
+  if (el.id === 'tripNotes') {
+    state.notes = el.value; save();
+    $('notesSaved').textContent = storageOk ? 'Saved' : 'Not saved';
+    return;
+  }
+  if (a === 'resNotes') { var r = findIn(state.res, id); if (r) { r.notes = el.value; save(); } }
+  if (a === 'personName') { var p = person(id); if (p && el.value.trim()) { p.name = el.value.trim(); renameOptions(p); save(); } }
+});
+
+document.addEventListener('keydown', function (ev) {
+  if (ev.key !== 'Enter') return;
+  var map2 = { newPerson: 'addPerson', newRes: 'addRes', newPack: 'addPack' };
+  var act = map2[ev.target.id];
+  if (act) { ev.preventDefault(); document.querySelector('[data-action="' + act + '"]').click(); }
+});
+
+window.addEventListener('hashchange', function () { showTab(location.hash.slice(1), false); });
+window.addEventListener('pagehide', saveNow);
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') saveNow(); });
+
+/* ------------------------------------------------------------------ */
+/* Start                                                              */
+/* ------------------------------------------------------------------ */
+renderAll();
+saveNow();
+showTab(location.hash ? location.hash.slice(1) : state.ui.tab, false);
+setInterval(renderCountdown, 1000);
+setInterval(function () {
+  renderNow();
+  renderDriveBanner();
+}, 30000);
+</script>
+</body>
+</html>
